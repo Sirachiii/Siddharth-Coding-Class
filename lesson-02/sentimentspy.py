@@ -49,6 +49,7 @@ def analyzeSentiment(text):
         elif -0.75 < sentiment <= -0.25:
             return "\n {Fore.RED} Negative sentiment detected, agent {user_name} score = {sentiment}"
     except:
+        return "\n {Fore.RED} Error occured during sentiment analyzation, agent {user_name}"
 
 # - Append the user input to `conversation_history`
 # - Update the sentiment counters based on the category
