@@ -49,6 +49,9 @@ def analyzeSentiment(text):
             return f"\n {Fore.YELLOW} Neutral sentiment detected, agent {user_name} score = {sentiment}"
         elif -0.75 < sentiment <= -0.25:
             return f"\n {Fore.RED} Negative sentiment detected, agent {user_name} score = {sentiment}"
+        elif sentiment < -0.75: 
+            return f"\n {Fore.RED} Very Negative sentiment detected, agent {user_name} score = {sentiment}" 
+
     except Exception as e: # - Handle exceptions to avoid crashes
         return f"\n {Fore.RED} Error occured during sentiment analyzation, agent {user_name}. {str(e)}"
 
