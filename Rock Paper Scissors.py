@@ -1,4 +1,3 @@
-
 import random
 from colorama import init, Fore
 init(autoreset=True)
@@ -6,10 +5,13 @@ init(autoreset=True)
 choices = {1: "Scissors", 2: "Rock", 3: "Paper"}
 
 winConditions = [
-    [1, 2],  # Scissors beats Rock
-    [3, 1],  # Paper beats Scissors
-    [2, 3]   # Rock beats Paper
+    [1, 2], 
+    [3, 1], 
+    [2, 3]   
 ]
+
+playerScore = 0
+aiScore = 0
 
 def getUserOption():
     while True:  
@@ -32,6 +34,7 @@ def checkWin(player, ai):
         return "tie"
 
 def game():
+    global playerScore, aiScore
     print(f"{Fore.MAGENTA}Welcome to Rock Paper Scissors!")
 
     while True: 
@@ -44,14 +47,18 @@ def game():
         print(f"{Fore.CYAN}AI chose {choices[aiChoice]}.")
 
         if winner == "player":
-            print(f"{Fore.GREEN}You won!")
+            playerScore += 1
+            print(f"{Fore.GREEN}You won!", end="")
         elif winner == "ai":
-            print(f"{Fore.RED}You lost!")
+            aiScore += 1
+            print(f"{Fore.RED}You lost!", end="")
         elif winner == "tie":
-            print(f"{Fore.YELLOW}It's a tie!")
+            print(f"{Fore.YELLOW}It's a tie!", end="")
+        print(f"{Fore.YELLOW} Score: {playerScore}-{aiScore}")
 
         repeatOption = input(f"{Fore.CYAN}Play again? (yes/no): ").lower() 
         if repeatOption != "yes":
+            print(f"{Fore.BLUE}Final Score: {Fore.YELLOW}{playerScore}-{aiScore}")
             print(f"{Fore.BLUE}Bye, thanks for playing!")
             break
 
