@@ -23,7 +23,7 @@ movies_df = load_data()
 
 # Vectorize the combined features and compute cosine similarity
 tfidf = TfidfVectorizer(stop_words="english")
-tfidf_matrix = tfidf.fit_transform(movies_df["combine_feature"])
+tfidf_matrix = tfidf.fit_transform(movies_df["combined_features"])
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
 # List all unique genres
@@ -37,7 +37,7 @@ def recommnedMovies(genre=None, mood=None, rating=None, top_number=5):
     filterDf = movies_df
     
     if genre:
-        filterDf = filterDf[filterDf["Genre"].str.contains(genres, case=False, na=False)]
+        filterDf = filterDf[filterDf["Genre"].str.contains(genre, case=False, na=False)]
     if rating:
         filterDf = filterDf[filterDf["IMDB_Rating"] >= rating] 
 
@@ -45,7 +45,7 @@ def recommnedMovies(genre=None, mood=None, rating=None, top_number=5):
     filterDf = filterDf.sample(frac=1).reset_index(drop=True)
 
     recommendations = []
-    for idx, row in filterDf.iterrow:
+    for idx, row in filterDf.iterrows():
         overview = row["Overview"] 
         if pd.isna(overview):
             continue 
@@ -84,20 +84,69 @@ def handleAi(name):
 
     while True:
         genreInput = input(f"{Fore.YELLOW} Enter a genre number or name: ").strip() 
-        if genreInput.isdigit() and 1 <= int(genreInput) <= genres:
+        if genreInput.isdigit() and 1 <= int(genreInput) <= len(genres):
             genre = genres[int(genreInput) - 1] 
             break
-        elif genreInput.title() in genres:
+        elif genreInput.title() in genres: 
             genre = genreInput.title()
             break
         
         print(f"{Fore.RED} Invalid input, please try again")
-
+    
+    mood = input(f"{Fore.YELLOW} How do you feel today? (Describe your mood): ").strip()
+    
     # Processing animation while analyzing mood 😊  😞  😐
-    
-    # Processing animation while finding movies
-    
-      # Small processing animation while finding movies 🎬🍿
+    print(f"{Fore.BLUE} \n Analyzing mood", end="", flush=True)
+    processingAnimation()
+    polarity = TextBlob(mood).sentiment.polarity
+    moodDescription = "positive" if polarity > 0 else "negative" if polarity < 0 else "neutral"
+    print(f"{Fore.GREEN} Your mood is {moodDescription}, polarity = {round(polarity, 2)}")
 
-   
+    while True:
+        ratingInput = input(f"{Fore.YELLOW} Enter minimum imdb rating (7.6 - 9.3) or 'skip': ").strip()
+        if ratingInput.lower() == "skip":
+            rating = None
+            break
+        try:
+            rating = float(ratingInput)
+            if 7.6 <= rating <= 9.3:
+                break
+            print(f"{Fore.RED} Rating is out of range! Try again.")
+        except ValueError:
+            print(f"{Fore.RED} Invalid input, please try again.")
+
+    # Processing animation while finding movies
+    print(f"{Fore.BLUE} Finding movies for {name}", end="", flush=True)
+    processingAnimation() # Small processing animation while finding movies 🎬🍿
+
+    recs = recommnedMovies(genre=genre, mood=mood, rating=rating, top_number=5)
+    if isinstance(recs, str): 
+        print(f"{Fore.RED} {recs} \n")
+    else:
+        displayRecommendation(recs, name)
+
+    while True:
+        action = input(f"{Fore.YELLOW} \n Would you like more recommendations (Yes/no): ").strip().lower()
+        if action == "no":
+            print(f"{Fore.GREEN} Enjoy your movie picks {name}! ")
+            break
+        elif action == "yes":
+            recs = recommnedMovies(genre=genre, mood=mood, rating=rating, top_number=5)
+            if isinstance(recs, str):
+                print(f"{Fore.RED} {recs} \n")
+            else:
+                displayRecommendation(recs, name)
+        else:
+            print(f"{Fore.RED} Invalid choice, you need to try again")
+
 # Main program 🎥
+def main():
+    print(f"{Fore.BLUE} Welcome to your personal movie recommendation assistant!")
+    print()
+    name = input(f"{Fore.YELLOW} What is your name? ").strip()
+    print(f"{Fore.GREEN} \n Nice to meet you {name}")
+    print()
+    handleAi(name)
+
+if __name__ == "__main__":
+    main()
