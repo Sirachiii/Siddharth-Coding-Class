@@ -1,10 +1,10 @@
-
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from textblob import TextBlob
 from colorama import init, Fore
 import time
+import random
 
 # Initialize colorama
 init(autoreset=True)
@@ -59,7 +59,7 @@ def recommnedMovies(genre=None, mood=None, rating=None, top_number=5):
     
     return recommendations if recommendations else "No suitable movie recommendation found."
 
-# Display recommendations🍿 😊  😞  🎥
+# Display recommendations
 def displayRecommendation(recs, username):
     print(f"{Fore.YELLOW} Ai analyzed movie recommendation for {username}")
     for idx, (title, Polarity) in enumerate(recs, 1):
@@ -72,15 +72,43 @@ def processingAnimation():
         print(f"{Fore.YELLOW} .", end="", flush=True)
         time.sleep(0.5)
 
-# Handle AI recommendation flow 🔍
+# Recommend a random movie
+def randomMovie(name):
+    random_row = movies_df.sample(1).iloc[0]
+    print(f"{Fore.GREEN} Random Movie Recommendation: {random_row['Series_Title']} ({random_row['IMDB_Rating']}/10)")
+    print(f"{Fore.CYAN} Genre: {random_row['Genre']}")
+    print(f"{Fore.CYAN} Overview: {random_row['Overview']}")
+
+    # Option for more
+    while True:
+        option = input(f"{Fore.BLUE} Would you like another recommendation? (yes/no): ").strip().lower()
+        if option == "yes":
+            randomMovie()
+        elif option == "no":
+            print()
+            handleAi(name)
+            break
+
+# Handle AI recommendation flow
 def handleAi(name):
     print(f"{Fore.BLUE} Let's find the perfect movie for you! \n")
 
-    # Show genres in a sinle line
+    # Show genres
     print(f"{Fore.GREEN} Available Genres: ", end="")
     for idx, genre in enumerate(genres, 1):
         print(f"{Fore.CYAN} {idx} {genre}")
     print()
+
+    # Option for random movie
+    while True:
+        choice = input(f"{Fore.YELLOW} Would you like a random movie recommendation? (yes/no): ").strip().lower()
+        if choice == 'yes':
+            randomMovie(name)
+            return
+        elif choice == 'no':
+            break
+        else:
+            print(f"{Fore.RED} Invalid input, please try again.")
 
     while True:
         genreInput = input(f"{Fore.YELLOW} Enter a genre number or name: ").strip() 
@@ -95,7 +123,6 @@ def handleAi(name):
     
     mood = input(f"{Fore.YELLOW} How do you feel today? (Describe your mood): ").strip()
     
-    # Processing animation while analyzing mood 😊  😞  😐
     print(f"{Fore.BLUE} \n Analyzing mood", end="", flush=True)
     processingAnimation()
     polarity = TextBlob(mood).sentiment.polarity
@@ -115,9 +142,8 @@ def handleAi(name):
         except ValueError:
             print(f"{Fore.RED} Invalid input, please try again.")
 
-    # Processing animation while finding movies
     print(f"{Fore.BLUE} Finding movies for {name}", end="", flush=True)
-    processingAnimation() # Small processing animation while finding movies 🎬🍿
+    processingAnimation()
 
     recs = recommnedMovies(genre=genre, mood=mood, rating=rating, top_number=5)
     if isinstance(recs, str): 
@@ -139,7 +165,7 @@ def handleAi(name):
         else:
             print(f"{Fore.RED} Invalid choice, you need to try again")
 
-# Main program 🎥
+# Main program
 def main():
     print(f"{Fore.BLUE} Welcome to your personal movie recommendation assistant!")
     print()
