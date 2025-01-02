@@ -4,7 +4,7 @@
 import cv2
 
 # load image
-image = cv2.imread("example.jpg")
+image = cv2.imread("lesson-07/example.jpg")
 
 # Image Sizes
 sizes = {
