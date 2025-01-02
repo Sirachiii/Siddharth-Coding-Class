@@ -12,7 +12,7 @@ init(autoreset=True)
 # Load and preprocess the dataset
 def load_data():
     try:
-        df = pd.read_csv(r"C:\Users\demon\Desktop\Siddharth Coding Class\imdb_top_1000.csv")
+        df = pd.read_csv(r"C:\Users\demon\Desktop\Siddharth Coding Class\lesson-06\imdb_top_1000.csv")
         df['combined_features'] = df['Genre'].fillna('') + ' ' + df['Overview'].fillna('')
         return df
     except FileNotFoundError:
