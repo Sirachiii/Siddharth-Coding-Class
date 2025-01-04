@@ -32,7 +32,7 @@ cv2.arrowedLine(imageRGB, widthArrowEnd, widthArrowStart, (0, 255, 255), 3, tipL
 font = cv2.FONT_HERSHEY_PLAIN 
 
 # Annotate the width value using Text
-widthLabelPosition = ((widthArrowStart[0] + widthArrowEnd[0]) // 2, widthArrowStart[1] + 30)
+widthLabelPosition = ((widthArrowStart[0] + widthArrowEnd[0]) // 2, widthArrowStart[1] + 30) 
 cv2.putText(imageRGB, f"Width = {width}px", widthLabelPosition, font, 2.0, (255, 255, 255), 2, cv2.LINE_AA)
 
 # Annotate the height value using Text
