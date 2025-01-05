@@ -40,7 +40,7 @@ heightLabelPosition = (heightArrowStart[0] - 300, (heightArrowStart[1] + heightA
 cv2.putText(imageRGB, f"Height = {height}px", heightLabelPosition, font, 2.0, (255, 255, 255), 2, cv2.LINE_AA)
 
 # Save image
-cv2.imwrite(r"lesson-09/Project/Output_images/editedImage.jpg", imageRGB) 
+cv2.imwrite(r"lesson-09/Project/Output_images/editedImageVersion2.jpg", cv2.cvtColor(imageRGB, cv2.COLOR_RGB2BGR))
 
 # Display the Annotated Image
 plt.figure(figsize=(12, 8))
