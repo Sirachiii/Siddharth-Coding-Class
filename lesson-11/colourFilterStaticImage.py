@@ -34,6 +34,9 @@ def applyColourFilter(image, filterType):
         # Decrease the intensity of the green channel 
         filterImage[:, :, 1] = cv2.subtract(filterImage[:, :, 1], 50)
     
+    elif filterType == "original":
+        filterImage = image.copy()
+    
     return filterImage
 
 # Load the Image
@@ -58,6 +61,7 @@ print("d : decrease blue intensity")
 print("f : decrease green intensity")
 print("c : decrease red intensity")
 
+print("o : for original image")
 print("q : quit")
 print()
 
@@ -91,6 +95,8 @@ while True:
     elif key == ord("c"):
         filterType = "decrease_red"
 
+    elif key == ord("o"):
+        filterType = "original"
     elif key == ord("q"):
         print("Exiting")
         break
