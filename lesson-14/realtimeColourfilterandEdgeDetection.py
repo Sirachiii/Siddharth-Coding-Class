@@ -48,6 +48,10 @@ def applyFilter(image, filterType):
     elif filterType == "original":
         filterImage = image.copy()
 
+    # Save Filter Image
+    imageName = f"image_{filterType}.jpg"
+    imagePath = f"lesson-14/Output_images/{imageName}"
+    cv2.imwrite(imagePath, filterImage)
     return filterImage
 
 # Laod the image
