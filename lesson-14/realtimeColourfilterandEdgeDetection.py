@@ -55,7 +55,7 @@ def applyFilter(image, filterType):
     return filterImage
 
 # Laod the image
-image = cv2.imread("lesson-14/example.jpg") 
+image = cv2.imread("lesson-14/example2.jpg") 
 
 if image is None:
     print("Error: Image not found")
