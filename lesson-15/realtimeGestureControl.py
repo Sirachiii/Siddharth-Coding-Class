@@ -62,3 +62,4 @@ while True:
 # Release captured motion picture and close the window
 capture.release()
 cv2.destroyAllWindows()
+
