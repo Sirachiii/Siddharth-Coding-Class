@@ -56,7 +56,7 @@ while True:
             thumbTip = hand_landmarks.landmark[mpHands.HandLandmark.THUMB_TIP]
             indexTip = hand_landmarks.landmark[mpHands.HandLandmark.INDEX_FINGER_TIP]
 
-            h, w, _ = frame.shape()
+            h, w, _ = frame.shape
             thumbPosition = (int(thumbTip.x * w), int(thumbTip.y * h))
             indexPosition = (int(indexTip.x * w), int(indexTip.y * h))
 
@@ -69,3 +69,40 @@ while True:
 
             if handLabel == "Right": # Control volume with the right hand
                 vol = np.interp(distance, [30, 300], [minimumVolume, maximumVolume])
+
+                try:
+                    volume.SetMasterVolumeLevel(vol, None)
+                except Exception as e:
+                    print(f"Error Adjusting Volume: {e}") 
+
+                # Visual Feedback for volume
+                volumeBar = np.interp(distance, [30, 300], [400, 150])
+
+                cv2.rectangle(frame, (50, 150), (85, 400), (255, 0, 0), 2)
+                cv2.rectangle(frame, (50, int(volumeBar)), (85, 400), (255, 0, 0), cv2.FILLED)
+                cv2.putText(frame, f"Volume = {int(np.interp(distance, [30, 300], [0, 100]))}%", (40, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 3)
+
+            elif handLabel == "Left": # Control brightness with the left hand
+                brightness = np.interp(distance, [30, 300], [0, 100])
+
+                try:
+                    sbc.set_brightness(brightness)
+                except Exception as e:
+                    print(f"Error Adjusting Brightness: {e}")
+
+                # Visual Feeback for brightness
+                brightnessBar = np.interp(distance, [30, 300], [400, 150])
+                cv2.rectangle(frame, (100, 150), (135, 400), (0, 255, 0), 2)
+                cv2.rectangle(frame, (100, int(brightnessBar)), (135, 400), (0, 255, 0), cv2.FILLED)
+                cv2.putText(frame, f"Brightness = {int(brightness)}%", (90, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 3)
+            
+    # Show the video feed with annotations
+    cv2.imshow("Gesture Volume and Brightness Controller", frame)
+
+    # Break the loop is 'q' key is pressed
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
+# Release the captured motion picture and close all windows
+capture.release()
+cv2.destroyAllWindows()
