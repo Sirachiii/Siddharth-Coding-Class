@@ -1,5 +1,4 @@
 
-
 import cv2
 import mediapipe as mp
 import time 
@@ -92,5 +91,35 @@ while True:
             # Gesture Logic
             currentTime = time.time()
              
+            # Taking Picture: Thumb Touches index finger
+            if abs(thumbX - indexX) < 30 and abs(thumbY - indexY) < 30:
+                if currentTime - lastActionTime > debounceTime:
+                    cv2.putText(image, "Picture Captured", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2) 
+                    lastActionTime = currentTime
+                    cv2.imwrite(f"lesson-18/Picture_{int(time.time())}.jpg", image)
+                    print("Picture Saved")
 
-            
+            # Change Filter: Thumb touches any other finger 
+            elif (abs(thumbX - middleX) < 30 and abs(thumbY - middleY) < 30) or \
+                 (abs(thumbX - ringX) < 30 and abs(thumbY - ringY) < 30) or \
+                 (abs(thumbX - pinkyX) < 30 and abs(thumbY - pinkyY) < 30):
+
+                if currentTime - lastActionTime > debounceTime:
+                    currentFilter = (currentFilter + 1) % len(filters) 
+                    lastActionTime = currentTime
+                    print(f"Switched to filter = {filters[currentFilter]}") 
+                
+    # Apply the current filter
+    filterImage = applyFilter(image, filters[currentFilter]) 
+
+    # Display the output
+    if filters[currentFilter] == "grayscale":
+        cv2.imshow("Gesture Control Photo App", cv2.cvtColor(filterImage, cv2.COLOR_GRAY2BGR)) 
+    else:
+        cv2.imshow("Gesture Control Photo App", filterImage)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+capture.release()
+cv2.destroyAllWindows()    
