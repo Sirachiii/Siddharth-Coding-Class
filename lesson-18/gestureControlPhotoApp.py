@@ -20,7 +20,7 @@ filters = [
 currentFilter = 0 # Starting filter
 
 # Webcam setup
-capture = cv2.VideoCapture() 
+capture = cv2.VideoCapture(0) 
 
 if not capture.isOpened():
     print("Error: Could not access the webcam")
