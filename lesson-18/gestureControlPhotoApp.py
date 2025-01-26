@@ -14,7 +14,7 @@ filters = [
     "grayscale", 
     "sepia",
     "negative", 
-    "blur"
+    "blur"  
 ]
 
 currentFilter = 0 # Starting filter
